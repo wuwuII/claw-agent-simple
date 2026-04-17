@@ -42,7 +42,9 @@ class WebSocketClient(
                                 }
                                 "text_response" -> {
                                     val text = json.optString("text", "")
-                                    if (text.isNotEmpty()) listener.onMessageReceived(text)
+                                    if (text.isNotEmpty()) {
+                                        listener.onMessageReceived(text)
+                                    }
                                 }
                                 "processing" -> {
                                     // 服务端正在处理，可忽略
