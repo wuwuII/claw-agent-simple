@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ClawChat</string>
+    <string name="hint_input">输入消息...</string>
+    <string name="connect">连接</string>
+    <string name="disconnect">断开</string>
+    <string name="settings">设置</string>
+    <string name="default_server">ws://47.93.240.220:8765</string>
+</resources>
