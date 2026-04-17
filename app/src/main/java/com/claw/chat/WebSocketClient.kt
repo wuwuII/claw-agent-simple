@@ -1,8 +1,11 @@
 package com.claw.chat
 
+import android.util.Log
 import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
+import org.json.JSONObject
 import java.net.URI
+import java.util.UUID
 
 class WebSocketClient(
     serverUrl: String,
@@ -10,6 +13,7 @@ class WebSocketClient(
 ) {
     private var client: WebSocketClient? = null
     private var connected = false
+    private val deviceId: String = UUID.randomUUID().toString()
 
     init {
         try {
@@ -17,11 +21,51 @@ class WebSocketClient(
             client = object : WebSocketClient(uri) {
                 override fun onOpen(handshakedata: ServerHandshake?) {
                     connected = true
+                    // 连接后立即发送注册消息
+                    val register = JSONObject().apply {
+                        put("type", "register")
+                        put("device_id", deviceId)
+                    }
+                    send(register.toString())
                     listener.onConnected()
                 }
 
                 override fun onMessage(message: String?) {
-                    message?.let { listener.onMessageReceived(it) }
+                    message?.let {
+                        try {
+                            val json = JSONObject(it)
+                            val type = json.optString("type")
+                            when (type) {
+                                "registered" -> {
+                                    // 注册成功，忽略或可以显示提示
+                                    Log.d("WebSocket", "注册成功")
+                                }
+                                "text_response" -> {
+                                    val text = json.optString("text", "")
+                                    if (text.isNotEmpty()) listener.onMessageReceived(text)
+                                }
+                                "processing" -> {
+                                    // 服务端正在处理，可忽略
+                                    Log.d("WebSocket", "服务端处理中...")
+                                }
+                                "ping" -> {
+                                    // 心跳，忽略
+                                    Log.d("WebSocket", "收到心跳")
+                                }
+                                "error" -> {
+                                    val msg = json.optString("message", "未知错误")
+                                    listener.onMessageReceived("错误: $msg")
+                                }
+                                else -> {
+                                    // 其他未知类型，原样显示
+                                    listener.onMessageReceived(it)
+                                }
+                            }
+                        } catch (e: Exception) {
+                            // 非 JSON 消息，原样显示
+                            listener.onMessageReceived(it)
+                        }
+                    }
                 }
 
                 override fun onClose(code: Int, reason: String?, remote: Boolean) {
@@ -49,7 +93,12 @@ class WebSocketClient(
     }
 
     fun sendMessage(text: String) {
-        client?.send(text)
+        val json = JSONObject().apply {
+            put("type", "text_message")
+            put("text", text)
+            put("device_id", deviceId)
+        }
+        client?.send(json.toString())
     }
 
     fun isConnected(): Boolean = connected
