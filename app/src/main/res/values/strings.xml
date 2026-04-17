@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">果冻Agent</string>
-    <string name="settings_title">设置</string>
-    <string name="hint_message">输入消息...</string>
-    <string name="send">发送</string>
-    <string name="save">保存</string>
-    <string name="test_connection">测试连接</string>
+    <string name="app_name">ClawChat</string>
+    <string name="hint_input">输入消息...</string>
+    <string name="connect">连接</string>
+    <string name="disconnect">断开</string>
+    <string name="settings">设置</string>
+    <string name="default_server">ws://47.93.240.220:8765</string>
 </resources>
