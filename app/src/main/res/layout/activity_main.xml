@@ -1,77 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/light_gray">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <!-- 标题栏 -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+        android:layout_height="56dp"
+        android:background="@color/purple_500"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="ClawChat"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:padding="8dp" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
+        <TextView
+            android:id="@+id/tvStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
+            android:text="未连接"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:layout_marginEnd="8dp" />
 
-    </FrameLayout>
-
-    <LinearLayout
-        android:id="@+id/inputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/input_background"
-        android:elevation="4dp"
-        android:orientation="horizontal"
-        android:padding="8dp"
-        android:gravity="center_vertical">
+        <Button
+            android:id="@+id/btnConnect"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="连接"
+            android:textSize="12sp"
+            android:layout_marginEnd="8dp" />
 
         <ImageButton
-            android:id="@+id/btnCamera"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:id="@+id/btnSettings"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@android:drawable/ic_menu_preferences"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="设置" />
+    </LinearLayout>
+
+    <!-- 消息列表 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvMessages"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:clipToPadding="false" />
+
+    <!-- 输入栏 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:padding="8dp"
+        android:elevation="4dp">
+
+        <ImageButton
+            android:id="@+id/btnImage"
+            android:layout_width="40dp"
+            android:layout_height="48dp"
             android:src="@android:drawable/ic_menu_camera"
-            android:contentDescription="拍照" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="发送图片" />
 
         <EditText
-            android:id="@+id/etMessage"
+            android:id="@+id/etInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="8dp"
-            android:background="@drawable/bg_input"
-            android:hint="输入消息..."
-            android:imeOptions="actionSend"
-            android:inputType="text"
+            android:hint="@string/hint_input"
             android:maxLines="4"
             android:padding="12dp"
-            android:textSize="16sp" />
+            android:background="@drawable/bg_input" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnSend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginStart="8dp"
-            android:text="发送" />
-
+            android:src="@android:drawable/ic_menu_send"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="发送" />
     </LinearLayout>
 
 </LinearLayout>
