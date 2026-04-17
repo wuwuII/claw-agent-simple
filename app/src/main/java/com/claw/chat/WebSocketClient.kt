@@ -100,6 +100,15 @@ class WebSocketClient(
         client?.send(json.toString())
     }
 
+    fun sendImage(base64Image: String) {
+        val json = JSONObject().apply {
+            put("type", "image_message")
+            put("image", base64Image)
+            put("device_id", deviceId)
+        }
+        client?.send(json.toString())
+    }
+
     fun isConnected(): Boolean = connected
 
     interface Listener {
