@@ -10,4 +10,5 @@
     <color name="light_gray">#FFF5F5F5</color>
     <color name="user_message_bg">#FFDCF8C6</color>
     <color name="ai_message_bg">#FFFFFFFF</color>
+    <color name="gray_message">#FFE0E0E0</color>
 </resources>
