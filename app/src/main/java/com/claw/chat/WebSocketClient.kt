@@ -37,21 +37,20 @@ class WebSocketClient(
                             val type = json.optString("type")
                             when (type) {
                                 "registered" -> {
-                                    // 注册成功，忽略或可以显示提示
                                     Log.d("WebSocket", "注册成功")
                                 }
                                 "text_response" -> {
                                     val text = json.optString("text", "")
                                     if (text.isNotEmpty()) {
                                         listener.onMessageReceived(text)
+                                    } else {
+                                        Unit
                                     }
                                 }
                                 "processing" -> {
-                                    // 服务端正在处理，可忽略
                                     Log.d("WebSocket", "服务端处理中...")
                                 }
                                 "ping" -> {
-                                    // 心跳，忽略
                                     Log.d("WebSocket", "收到心跳")
                                 }
                                 "error" -> {
@@ -59,12 +58,10 @@ class WebSocketClient(
                                     listener.onMessageReceived("错误: $msg")
                                 }
                                 else -> {
-                                    // 其他未知类型，原样显示
                                     listener.onMessageReceived(it)
                                 }
                             }
                         } catch (e: Exception) {
-                            // 非 JSON 消息，原样显示
                             listener.onMessageReceived(it)
                         }
                     }
