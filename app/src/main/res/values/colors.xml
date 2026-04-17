@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="gray">#FF888888</color>
-    <color name="gray_message">#FFE8E8E8</color>
-    <color name="light_gray">#FFF5F5F5</color>
-    <color name="user_message_bg">#FFDCF8C6</color>
-    <color name="ai_message_bg">#FFFFFFFF</color>
+    
+    <!-- 果冻Agent 橙色主题 -->
+    <color name="primary">#FF9800</color>
+    <color name="primary_dark">#F57C00</color>
+    <color name="accent">#FFB74D</color>
+    <color name="message_user">#FF9800</color>
+    <color name="message_assistant">#FFF3E0</color>
+    <color name="background_chat">#FFFAF0</color>
+    <color name="input_background">#FFE8CC</color>
+    
+    <!-- 文本颜色 -->
+    <color name="text_primary">#DE000000</color>
+    <color name="text_secondary">#8A000000</color>
 </resources>
