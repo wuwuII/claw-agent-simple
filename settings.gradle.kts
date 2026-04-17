@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ClawChat"
+rootProject.name = "ClawAgent"
 include(":app")
