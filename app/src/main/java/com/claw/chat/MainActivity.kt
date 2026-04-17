@@ -1,11 +1,18 @@
 package com.claw.chat
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Base64
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.claw.chat.databinding.ActivityMainBinding
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -15,6 +22,10 @@ class MainActivity : AppCompatActivity() {
     private val messages = mutableListOf<ChatMessage>()
     private var webSocketClient: WebSocketClient? = null
     private val prefs by lazy { getSharedPreferences("settings", MODE_PRIVATE) }
+
+    private val imagePicker = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let { sendImage(it) }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +67,10 @@ class MainActivity : AppCompatActivity() {
         binding.etInput.setOnEditorActionListener { _, _, _ ->
             sendMessage()
             true
+        }
+
+        binding.btnImage.setOnClickListener {
+            imagePicker.launch("image/*")
         }
     }
 
@@ -115,7 +130,50 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addWelcomeMessage() {
-        addAssistantMessage("你好！我是果冻助手 v1.0.0。你可以文字聊天，或者按住说话进行语音对话。")
+        addAssistantMessage("你好！我是果冻助手 v1.1.0。你可以文字聊天、发送图片，或者按住说话进行语音对话。")
+    }
+
+    private fun sendImage(uri: Uri) {
+        if (webSocketClient?.isConnected() != true) {
+            Toast.makeText(this, "请先连接服务器", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        try {
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+            val compressedBitmap = compressBitmap(bitmap, 800)
+            val base64Image = bitmapToBase64(compressedBitmap)
+
+            addUserMessage("[图片]")
+            webSocketClient?.sendImage(base64Image)
+        } catch (e: Exception) {
+            Toast.makeText(this, "图片处理失败: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun compressBitmap(bitmap: Bitmap, maxSize: Int): Bitmap {
+        val width = bitmap.width
+        val height = bitmap.height
+        val scale = if (width > height) {
+            maxSize.toFloat() / width
+        } else {
+            maxSize.toFloat() / height
+        }
+
+        return if (scale < 1) {
+            val newWidth = (width * scale).toInt()
+            val newHeight = (height * scale).toInt()
+            Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
+        } else {
+            bitmap
+        }
+    }
+
+    private fun bitmapToBase64(bitmap: Bitmap): String {
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
+        val bytes = outputStream.toByteArray()
+        return Base64.encodeToString(bytes, Base64.DEFAULT)
     }
 
     private fun addUserMessage(text: String) {
