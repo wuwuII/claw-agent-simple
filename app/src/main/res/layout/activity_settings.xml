@@ -40,6 +40,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- 服务器地址 -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -56,6 +57,23 @@
                 android:inputType="textUri"
                 android:padding="12dp"
                 android:background="@drawable/bg_input"
+                android:layout_marginBottom="16dp" />
+
+            <!-- 模型选择 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AI 模型"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <Spinner
+                android:id="@+id/spinnerModel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_input"
+                android:padding="12dp"
                 android:layout_marginBottom="16dp" />
 
             <Button
