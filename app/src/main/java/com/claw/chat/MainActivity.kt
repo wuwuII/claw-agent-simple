@@ -77,12 +77,13 @@ class MainActivity : AppCompatActivity() {
     private fun connect() {
         val serverUrl = prefs.getString("server_url", getString(R.string.default_server))
             ?: getString(R.string.default_server)
+        val selectedModel = prefs.getString("model", "kimi-k2.5") ?: "kimi-k2.5"
 
         webSocketClient = WebSocketClient(serverUrl, object : WebSocketClient.Listener {
             override fun onConnected() {
                 runOnUiThread {
                     updateConnectionStatus(true)
-                    Toast.makeText(this@MainActivity, "已连接", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, "已连接 | 模型: $selectedModel", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -104,7 +105,7 @@ class MainActivity : AppCompatActivity() {
                     addAssistantMessage(text)
                 }
             }
-        })
+        }, selectedModel)
 
         webSocketClient?.connect()
     }
