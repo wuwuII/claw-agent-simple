@@ -9,7 +9,8 @@ import java.util.UUID
 
 class WebSocketClient(
     serverUrl: String,
-    private val listener: Listener
+    private val listener: Listener,
+    private val selectedModel: String = "kimi-k2.5"
 ) {
     private var client: WebSocketClient? = null
     private var connected = false
@@ -21,12 +22,18 @@ class WebSocketClient(
             client = object : WebSocketClient(uri) {
                 override fun onOpen(handshakedata: ServerHandshake?) {
                     connected = true
-                    // 连接后立即发送注册消息
+                    // 连接后先注册
                     val register = JSONObject().apply {
                         put("type", "register")
                         put("device_id", deviceId)
                     }
                     send(register.toString())
+                    // 再设置模型
+                    val setModel = JSONObject().apply {
+                        put("type", "set_model")
+                        put("model", selectedModel)
+                    }
+                    send(setModel.toString())
                     listener.onConnected()
                 }
 
